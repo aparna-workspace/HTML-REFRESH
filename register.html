@@ -3,6 +3,7 @@
 <head>
     <title>Register</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <h2>Register Here</h2>
@@ -21,5 +22,33 @@
 
     <br>
     <a href="index.html">Back to Home</a>
+    <script>
+  const SUPABASE_URL = "https://jbtgzplcancrmetrzwpz.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_4Aeu32wBFk3x1FzkEcd2Xg_ynlrUUzR";
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const form = document.getElementById("registerForm");
+  const msg = document.getElementById("msg");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    msg.textContent = "Registering...";
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const { data, error } = await supabaseClient.auth.signUp({
+      email,
+      password
+    });
+
+    if (error) {
+      msg.textContent = "❌ " + error.message;
+    } else {
+      msg.textContent = "✅ Registered! Please check your email to confirm.";
+    }
+  });
+</script>    
 </body>
 </html>
