@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <h2>Login</h2>
+
+  <form id="loginForm">
+    <label>Email</label><br>
+    <input type="email" id="email" required><br><br>
+
+    <label>Password</label><br>
+    <input type="password" id="password" required><br><br>
+
+    <button type="submit">Login</button>
+  </form>
+
+  <p id="msg"></p>
+  <a href="index.html">Back to Home</a>
+
+  <script>
+    const SUPABASE_URL = "PASTE_YOUR_PROJECT_URL";
+    const SUPABASE_KEY = "PASTE_YOUR_PUBLISHABLE_KEY";
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const form = document.getElementById("loginForm");
+    const msg = document.getElementById("msg");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      msg.textContent = "Logging in...";
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email, password
+      });
+
+      if (error) {
+        msg.textContent = "❌ " + error.message;
+      } else {
+        msg.textContent = "✅ Logged in! Welcome " + data.user.email;
+      }
+    });
+  </script>
+
+</body>
+</html>
