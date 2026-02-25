@@ -2,7 +2,41 @@
   <meta charset="utf-8">
   <title>Aparna | Learning Cloud & DevOps</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+<div id="userSection">
+  <p id="userEmail"></p>
+  <button id="logoutBtn" style="display:none;">Logout</button>
+</div>
+<script>
+  const SUPABASE_URL = "https://jbtgzplcancrmetrzwpz.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_4Aeu32wBFk3x1FzkEcd2Xg_ynlrUUzR";
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const userEmail = document.getElementById("userEmail");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  async function checkUser() {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+
+    if (user) {
+      userEmail.textContent = "Logged in as: " + user.email;
+      logoutBtn.style.display = "inline-block";
+    } else {
+      userEmail.textContent = "Not logged in.";
+      logoutBtn.style.display = "none";
+    }
+  }
+
+  logoutBtn.addEventListener("click", async () => {
+    await supabaseClient.auth.signOut();
+    alert("Logged out successfully!");
+    location.reload();
+  });
+
+  checkUser();
+</script>
 <body>
     <h1>Welcome to My Cloud Learning Portal</h1>
     <p>I am learning Linux, Git, Cloud and DevOps step by step.</p>
@@ -15,7 +49,6 @@
         About Me
     </button>
 
-    <p><em>This page is part of my personal learning journey.</em></p>
 </body>
 
 
